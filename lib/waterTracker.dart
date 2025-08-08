@@ -131,12 +131,23 @@ class _WatertrackerState extends State<Watertracker> {
                           Positioned(
                             bottom: 65,
                             left: 60,
+                            child: Column(
+                              children: [
+                                Text("Now",style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
 
-                            child: Text("100%",style: TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
-                            ),),
+                                ),),
+                                Text("100%",style: TextStyle(
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                ),),
+                              ],
+                            ),
+
+
                           )
                       ]
 
@@ -204,7 +215,77 @@ class _WatertrackerState extends State<Watertracker> {
 
               color:Color(0xff25A8CF),
             ),
+          ),
+          SizedBox(height: 10,),
+          Column(
+            children: [
+              Text("Your Water Tank Capacity", style: TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: 20,
+                color: Color(0xff3FA0BB),
+
+              ),),
+              SizedBox(height: 10,),
+              Container(
+                height: 120,
+
+                child: Image.asset("asset/watertank.png")
+              )
+             
+            ],
+          ),
+          Column(
+            children: [
+              SizedBox(height: 10,),
+              Text("Current Water Levels", style: TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: 20,
+                color: Color(0xff3FA0BB),
+
+              ),),
+              SizedBox(height: 10,),
+              Padding(
+                padding: EdgeInsets.only(right: 35),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: 160,
+                      width: 160,
+                        child:
+                        Image.asset("asset/indicator.png"),
+                    ),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                    Container(
+
+                      height: 110,
+                      width: 110,
+                      child: CircularProgressIndicator(
+                      backgroundColor: Colors.grey.withOpacity(0.2),
+                        color: Color(0xff3FA0BB),
+                         strokeWidth: 30,
+                        value: 0.50,
+                      ),
+                    ),
+                        Text("100%",style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w900,
+                          color: Color(0xff5BBFD9),
+                        ),)
+                    ]
+
+                    )
+
+
+                  ],
+                ),
+              )
+
+            ],
           )
+          
 
 
         ],
