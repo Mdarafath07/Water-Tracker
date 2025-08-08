@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 class Watertracker extends StatefulWidget {
   const Watertracker({super.key});
@@ -7,8 +9,21 @@ class Watertracker extends StatefulWidget {
 }
 
 class _WatertrackerState extends State<Watertracker> {
+  int currentInTake = 0;
+  final int goal = 5000;
+  void waterAdd (int amount){
+    setState(() {
+      currentInTake = (currentInTake + amount).clamp(0, goal);
+    });
+  }
+  void resetTank(){
+    setState(() {
+      currentInTake=0;
+    });
+  }
   @override
   Widget build(BuildContext context) {
+    double progress = (currentInTake/goal).clamp(0, 1);
     return Scaffold(
       backgroundColor: Colors.white,
 
@@ -129,26 +144,44 @@ class _WatertrackerState extends State<Watertracker> {
                       child: Image.asset("asset/waterdrop.png"),
                        ),
                           Positioned(
-                            bottom: 65,
-                            left: 60,
+                            bottom: 100,
+                            left: 70,
                             child: Column(
                               children: [
-                                Text("Now",style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white,
+                                Container(
+                                  child:  Text("Now",style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.white,
 
-                                ),),
-                                Text("100%",style: TextStyle(
-                                  fontSize: 35,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white,
-                                ),),
+                                  ),),
+                                ),
+
                               ],
                             ),
 
 
-                          )
+                          ),
+                          Positioned(
+                            bottom: 65,
+                            left: 60,
+                            child: Column(
+                              children: [
+                                Container(
+                                  child: Text("${(progress*100).toInt()}%",style: TextStyle(
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.white,
+                                  ),),
+
+
+                                )
+
+                              ],
+                            ),
+
+
+                          ),
                       ]
 
                       ),
@@ -219,18 +252,115 @@ class _WatertrackerState extends State<Watertracker> {
           SizedBox(height: 10,),
           Column(
             children: [
-              Text("Your Water Tank Capacity", style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 20,
-                color: Color(0xff3FA0BB),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Container(
+                  height: 150,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    
+                    borderRadius: BorderRadius.circular(10),
 
-              ),),
-              SizedBox(height: 10,),
-              Container(
-                height: 120,
+                  ),
+                  child: SizedBox(
+                    height: 200,
+                    width: double.infinity,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          right: 0,
 
-                child: Image.asset("asset/watertank.png")
+                          child: Container(
+                            height: 150,
+                            width: 260,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey.withOpacity(0.1),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 5,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children:[
+                              Container(
+                                height: 150,
+                                width: 150,
+                                child: Image.asset("asset/watertank.png"),
+                              ),
+                              Container(
+                                child: Text("${currentInTake} LTR",style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                ),)
+                              )
+
+                               ]
+
+                          ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 150,
+                            width: 220,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Column(
+
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Your water tank capacity is 5000L, and it currently contains ${currentInTake}L of water.",style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 15,
+                                    color:Color(0xff25A8CF),
+                                  ),),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                    width: 70,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(0xff3FA0BB),
+                                        foregroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      onPressed: ()=>resetTank(),
+                                      child: const Text(
+                                        "Sell",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+
+                              ]
+
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+
+                ),
               )
+
              
             ],
           ),
@@ -266,10 +396,10 @@ class _WatertrackerState extends State<Watertracker> {
                       backgroundColor: Colors.grey.withOpacity(0.2),
                         color: Color(0xff3FA0BB),
                          strokeWidth: 30,
-                        value: 0.50,
+                        value: progress,
                       ),
                     ),
-                        Text("100%",style: TextStyle(
+                        Text("${(progress*100).toInt()}%",style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w900,
                           color: Color(0xff5BBFD9),
@@ -284,8 +414,117 @@ class _WatertrackerState extends State<Watertracker> {
               )
 
             ],
+          ),
+          SizedBox(height: 10,),
+          SizedBox(
+            width: 250,
+            child: Divider(
+              thickness: 2,
+
+              color:Color(0xff25A8CF),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Container(
+              height: 100,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey.withOpacity(0.1),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff3FA0BB),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: ()=> waterAdd(100),
+                        child: const Text(
+                          "100 LTR",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff3FA0BB),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: ()=> waterAdd(200),
+                        child: const Text(
+                          "200 LTR",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff3FA0BB),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: ()=> waterAdd(300),
+                        child: const Text(
+                          "300 LTR",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child:
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff3FA0BB),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: ()=> waterAdd(500),
+                        child: const Text(
+                          "500 LTR",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           )
-          
+
+
+
 
 
         ],
